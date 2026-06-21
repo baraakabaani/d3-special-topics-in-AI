@@ -1,0 +1,92 @@
+[
+  {
+    "id": 1,
+    "type": "vector_only",
+    "question": "What token-aware technique does the multivector retrieval paper use to reduce index size while maintaining late-interaction quality?",
+    "reference_answer": "The paper proposes token-aware clustering that groups similar token embeddings within a document into cluster centroids before indexing. Combined with hierarchical indexing, this reduces the number of vectors stored per document from one per token to one per cluster, significantly shrinking index size while preserving the multi-vector late-interaction scoring mechanism used in models like ColBERT.",
+    "expected_doc_ids": ["2604.28142v1"],
+    "difficulty": "easy",
+    "why_vector_wins": "Answer is dense technical prose inside one chunk. The title keywords (multivector, retrieval, token, clustering, hierarchical) are strong and match the query vocabulary directly. Graph traversal adds nothing."
+  },
+  {
+    "id": 2,
+    "type": "vector_only",
+    "question": "How does the Structure-Aware Chunking paper handle table rows when splitting documents into retrieval chunks?",
+    "reference_answer": "The paper treats each table as an atomic unit that must not be split across chunk boundaries. It detects table structures during parsing and forces chunk boundaries to align with table edges, so every chunk either contains a full table or no table content at all. This prevents chunk splits from breaking the relational meaning between table header and data rows.",
+    "expected_doc_ids": ["2605.00318v1"],
+    "difficulty": "easy",
+    "why_vector_wins": "Single document, answer lives in the methodology section. The topic keyword 'chunking' from the title matches the query. No co-authorship or topic-intersection traversal needed."
+  },
+  {
+    "id": 3,
+    "type": "vector_only",
+    "question": "What specific bottleneck does OBLIQ-Bench expose in modern retrievers that standard benchmarks miss?",
+    "reference_answer": "OBLIQ-Bench uses latent and implicit queries — queries where the information need is not explicitly stated but must be inferred from context or background knowledge. Standard benchmarks use explicit queries whose wording closely matches the source document, artificially inflating retrieval scores. OBLIQ-Bench reveals that retrievers trained on explicit queries fail badly on implicit ones, exposing a gap between benchmark performance and real-world retrieval quality.",
+    "expected_doc_ids": ["2605.06235v1"],
+    "difficulty": "easy",
+    "why_vector_wins": "Technical claim about a benchmark methodology, fully contained within one paper. Query vocabulary (bottleneck, retrieval, benchmark) has strong lexical overlap with the source chunk."
+  },
+  {
+    "id": 4,
+    "type": "comparison",
+    "question": "How do the AgenticRAG and Superintelligent Retrieval Agent papers differ in their strategy for handling complex multi-step queries over enterprise knowledge bases?",
+    "reference_answer": "AgenticRAG decomposes a complex query into sub-queries and routes each to a specialized retrieval agent, then merges their outputs. The architecture is multi-agent and parallel. The Superintelligent Retrieval Agent paper instead treats retrieval as a single autonomous agent that iteratively decides which tool to call next based on intermediate results, using a sequential reasoning loop. AgenticRAG emphasizes specialization and parallelism while the Superintelligent paper emphasizes depth of sequential reasoning.",
+    "expected_doc_ids": ["2605.05538v1", "2605.06647v1"],
+    "difficulty": "medium",
+    "why_vector_wins": "Partially — vector search can retrieve both papers if 'enterprise knowledge base agentic retrieval' is in the query. But the comparison requires synthesizing claims from two separate documents, which is still primarily a retrieval problem solved by dense similarity."
+  },
+  {
+    "id": 5,
+    "type": "comparison",
+    "question": "What are the differences in evaluation design between the Verbal-R3 reranker paper and the Hybrid Retrieval and Reranking paper for measuring reranking quality?",
+    "reference_answer": "Verbal-R3 evaluates reranking by measuring both the final ranking quality (NDCG) and the quality of the verbal justifications generated alongside each rank decision, using human evaluation to assess whether the explanations are faithful to the document. The Hybrid Retrieval and Reranking paper evaluates reranking by its contribution to end-to-end answer quality in evidence-grounded RAG, measuring faithfulness and answer correctness rather than ranking metrics alone.",
+    "expected_doc_ids": ["2605.01399v1", "2605.01664v1"],
+    "difficulty": "medium",
+    "why_vector_wins": "Two papers about reranking — dense retrieval returns both because the query is topically specific. Comparison still done by reading retrieved text."
+  },
+  {
+    "id": 6,
+    "type": "comparison",
+    "question": "How do Text-Graph Synergy and the Hierarchical Abstract Tree paper use document structure differently to improve cross-document retrieval?",
+    "reference_answer": "Text-Graph Synergy builds a knowledge graph from entities and relations extracted from documents and uses the graph bidirectionally: retrieved text guides graph traversal, and graph paths verify or complete missing text spans. The Hierarchical Abstract Tree paper builds a tree of progressive document summaries (full text at leaves, abstracts at mid-level, single-sentence summaries at root) and navigates the tree top-down to narrow from corpus-level to document-level to passage-level retrieval. Text-Graph Synergy adds a relational layer on top of text; Hierarchical Abstract Tree adds a granularity hierarchy on top of text.",
+    "expected_doc_ids": ["2605.05643v1", "2605.00529v1"],
+    "difficulty": "medium",
+    "why_vector_wins": "Both papers are about structured document retrieval. A query about structural approaches returns both via dense similarity without needing graph traversal."
+  },
+  {
+    "id": 7,
+    "type": "comparison",
+    "question": "What do the reasoning-intensive retrieval survey and the LLM-oriented information retrieval paper identify as the core failure mode of current retrieval systems for LLM pipelines?",
+    "reference_answer": "The reasoning-intensive retrieval survey finds that current retrievers are optimized for surface-level similarity and fail when queries require multi-step inference to determine relevance — the relevant document is not the one most similar to the query, but the one needed to complete a reasoning chain. The LLM-oriented paper identifies a complementary failure: retrieved documents contain irrelevant noise that causes LLMs to generate inaccurate answers, and proposes a denoising-first perspective where retrieval should filter noise before passing context to the LLM. Both papers agree that retrieval optimized independently from the reasoning stage is insufficient.",
+    "expected_doc_ids": ["2605.00063v1", "2605.00505v1"],
+    "difficulty": "medium",
+    "why_vector_wins": "A query about failure modes of retrieval for LLMs returns both papers via semantic similarity. The synthesis is reading-based, not graph-based."
+  },
+  {
+    "id": 8,
+    "type": "graph_guided",
+    "question": "Which papers in this corpus were authored by Wataru Uegami?",
+    "reference_answer": "Wataru Uegami co-authored two papers in this corpus. Both papers are in the medical imaging and AI safety domain. His name does not appear prominently in any chunk's body text — it is stored only as a structured Author node connected to Paper nodes via WROTE edges in the knowledge graph.",
+    "expected_doc_ids": ["2605.04003v1", "2605.04005v1"],
+    "difficulty": "hard",
+    "why_graph_wins": "Author names are stored on Paper metadata and in Author nodes, but are rarely repeated verbatim in body-text chunks. Vector search has no concept of an Author entity — it would need Uegami's name to appear in a retrievable chunk, which it typically does not beyond the author list on the title page. The only reliable path is MATCH (a:Author {name: 'Wataru Uegami'})<-[:WROTE]-(p:Paper) RETURN p."
+  },
+  {
+    "id": 9,
+    "type": "graph_guided",
+    "question": "Which papers in this corpus are tagged with both the 'recommendation' topic and the 'agent' topic in the knowledge graph?",
+    "reference_answer": "Papers appearing at the intersection of the 'recommendation' and 'agent' topic clusters in the knowledge graph deal with agent-based recommendation systems — systems where an autonomous agent simulates user behavior or drives the recommendation loop. These papers exist at the boundary between two large topic clusters (recommendation has 13 papers, agent has 10 papers in this corpus).",
+    "expected_doc_ids": ["2605.05250v1"],
+    "difficulty": "hard",
+    "why_graph_wins": "This requires a topic intersection query: MATCH (p:Paper)-[:HAS_TOPIC]->(t1 {name:'recommendation'}) MATCH (p)-[:HAS_TOPIC]->(t2 {name:'agent'}). Vector search returns papers similar to a query about recommendation agents, but cannot enforce that both topic nodes exist for the same paper — it returns papers with strong semantic overlap with either topic, not necessarily both."
+  },
+  {
+    "id": 10,
+    "type": "graph_guided",
+    "question": "Which papers in this corpus are most closely related to the Text-Graph Synergy paper through shared research topics, based on the RELATED_TO graph edges?",
+    "reference_answer": "The papers most closely related to Text-Graph Synergy (2605.05643v1) through shared Topic nodes are those that overlap on 3 or more extracted topic keywords from their titles. These are papers in the knowledge graph retrieval, bidirectional verification, and completion sub-domain of RAG. The RELATED_TO edge stores the exact shared_topics count, allowing ranking by degree of topical similarity.",
+    "expected_doc_ids": ["2605.05287v1", "2605.05538v1", "2605.00529v1"],
+    "difficulty": "hard",
+    "why_graph_wins": "RELATED_TO is a direct Paper-Paper edge built from shared HAS_TOPIC counts at graph-build time. A vector search for 'papers related to Text-Graph Synergy' returns papers semantically similar to the query text, not papers with the highest topical overlap count in the graph — these are different rankings. The only way to answer this exactly is to traverse RELATED_TO edges from the seed node."
+  }
+]
