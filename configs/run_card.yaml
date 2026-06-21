@@ -1,0 +1,29 @@
+project: streaming_learner_automl_week5
+track: A
+optimizer:
+  framework: optuna
+  sampler: TPESampler
+  sampler_seed: 42
+  pruner: MedianPruner
+  pruner_n_startup_trials: 10
+  n_trials: 100
+  direction: maximize
+  objective_metric: NDCG@5
+  latency_constraint_ms: 100.0
+best_config:
+  k: 48
+  metric: dot_product
+  svd_dim: 44
+  normalization: l2
+  hybrid_weight_alpha: 0.9791225034422003
+results:
+  ndcg_at_5: 0.3684
+  recall_at_5: 0.465
+  p95_latency_ms: 1.46
+  baseline_ndcg_at_5: 0.141
+  improvement_pct: 161.35
+online_learner:
+  framework: river
+  component: adaptive_hybrid_weight
+  drift_detector: ADWIN
+  adwin_delta: 0.01

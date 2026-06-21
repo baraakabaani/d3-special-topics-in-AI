@@ -1,0 +1,22 @@
+# D1
+optuna>=3.0
+river>=0.21
+rank-bm25
+scikit-learn
+numpy
+matplotlib
+pyyaml
+jupyter
+nbconvert
+pypdf
+fpdf2
+
+# D2
+fastapi>=0.110
+uvicorn[standard]
+pymongo>=4.6
+qdrant-client>=1.9
+sentence-transformers>=3.0
+neo4j>=5.0
+python-dotenv
+requests

@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env
+.env.local
+
+# PDFs are too large for GitHub (100 PDFs = hundreds of MB)
+data/*.pdf
+
+# Model weights — too large for GitHub
+outputs/lora_adapter/
+
+# Intermediate / raw generated files
+outputs/train_triples_raw.json
+
+# Temporary files
+outputs/_chart_tmp.png
+*.zip
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker volumes (local data, never commit)
+mongo_data/
+qdrant_data/
+neo4j_data/
+neo4j_logs/
